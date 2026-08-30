@@ -176,8 +176,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Split brands by comma and normalize each
             const brandList = cardBrands.split(',').map(b => normalizeBrand(b));
             
-            // Check if any brand matches
-            const matches = brandList.some(b => b === normalizedSearchBrand || b.includes(normalizedSearchBrand));
+            // Check if any brand matches EXACTLY (not partial match)
+            const matches = brandList.some(b => b === normalizedSearchBrand);
             
             if (matches) {
                 card.style.display = '';
