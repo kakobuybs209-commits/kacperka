@@ -542,10 +542,134 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =========================================
-    // BULK IMPORT/EXPORT LOGIC
+    // BULK SCRAPE LOGIC (Weidian)
     // =========================================
     
-    const bulkImportBtn = document.getElementById('bulk-import-btn');
+    const bulkScrapeBtn = document.getElementById('bulk-import-btn');
+    const bulkScrapeModal = document.getElementById('bulk-scrape-modal');
+    const closeBulkScrapeBtn = document.getElementById('close-bulk-scrape-modal');
+    const bulkScrapeUrlsTextarea = document.getElementById('bulk-scrape-urls');
+    const startBulkScrapeBtn = document.getElementById('start-bulk-scrape-btn');
+    const bulkScrapeBatchSelect = document.getElementById('bulk-scrape-batch');
+    const bulkScrapeConcurrencySelect = document.getElementById('bulk-scrape-concurrency');
+    const bulkScrapePinCheckbox = document.getElementById('bulk-scrape-pin');
+    const bulkScrapeProgress = document.getElementById('bulk-scrape-progress');
+    const bulkScrapeProgressBar = document.getElementById('bulk-scrape-progress-bar');
+    const bulkScrapeStatus = document.getElementById('bulk-scrape-status');
+    const bulkScrapeResults = document.getElementById('bulk-scrape-results');
+    const bulkScrapeSuccessCount = document.getElementById('bulk-scrape-success-count');
+    const bulkScrapeErrorCount = document.getElementById('bulk-scrape-error-count');
+    
+    console.log('Bulk scrape elements:', { bulkScrapeBtn, bulkScrapeModal, closeBulkScrapeBtn });
+    
+    // Open bulk scrape modal
+    if (bulkScrapeBtn) {
+        bulkScrapeBtn.addEventListener('click', () => {
+            console.log('Bulk Scrape button clicked');
+            if (bulkScrapeModal) {
+                console.log('Opening bulk scrape modal');
+                bulkScrapeModal.classList.remove('hidden');
+                document.body.classList.add('modal-open');
+            } else {
+                console.error('Bulk scrape modal not found');
+            }
+        });
+    } else {
+        console.error('Bulk scrape button not found');
+    }
+    
+    // Close bulk scrape modal
+    if (closeBulkScrapeBtn) {
+        closeBulkScrapeBtn.addEventListener('click', () => {
+            bulkScrapeModal.classList.add('hidden');
+            document.body.classList.remove('modal-open');
+        });
+    }
+    
+    // Click outside to close
+    if (bulkScrapeModal) {
+        bulkScrapeModal.addEventListener('click', (e) => {
+            if (e.target === bulkScrapeModal) {
+                closeBulkScrapeBtn.click();
+            }
+        });
+    }
+    
+    // Start bulk scrape
+    if (startBulkScrapeBtn) {
+        startBulkScrapeBtn.addEventListener('click', async () => {
+            const urls = bulkScrapeUrlsTextarea.value.trim();
+            if (!urls) {
+                showToast('Wklej przynajmniej jeden link Weidian', 'error');
+                return;
+            }
+            
+            // Parse URLs
+            const urlArray = urls.split(/[\n\s]+/).filter(url => url.trim());
+            console.log('Parsed URLs:', urlArray);
+            
+            const batch = bulkScrapeBatchSelect.value;
+            const concurrency = parseInt(bulkScrapeConcurrencySelect.value);
+            const pin = bulkScrapePinCheckbox.checked;
+            
+            // Show progress
+            bulkScrapeProgress.classList.remove('hidden');
+            bulkScrapeResults.classList.add('hidden');
+            bulkScrapeProgressBar.style.width = '0%';
+            bulkScrapeStatus.textContent = 'Rozpoczynam scraping...';
+            startBulkScrapeBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/scrape-bulk', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        urls: urlArray,
+                        batch,
+                        concurrency,
+                        pin,
+                        replaceMode: 'none'
+                    })
+                });
+                
+                const data = await response.json();
+                console.log('Bulk scrape response:', data);
+                
+                // Update progress bar
+                bulkScrapeProgressBar.style.width = '100%';
+                
+                // Show results
+                bulkScrapeProgress.classList.add('hidden');
+                bulkScrapeResults.classList.remove('hidden');
+                bulkScrapeSuccessCount.textContent = data.successes || 0;
+                bulkScrapeErrorCount.textContent = data.failures || 0;
+                
+                if (data.success) {
+                    showToast(`Zaimportowano ${data.successes} produktów!`, 'success');
+                    // Reload products after successful import
+                    if (typeof loadAdminProducts === 'function') {
+                        loadAdminProducts();
+                    }
+                } else {
+                    showToast(`Import zakończony z ${data.failures} błędami`, 'warning');
+                }
+                
+            } catch (error) {
+                console.error('Bulk scrape error:', error);
+                bulkScrapeProgress.classList.add('hidden');
+                showToast('Błąd podczas scrapingu: ' + error.message, 'error');
+            } finally {
+                startBulkScrapeBtn.disabled = false;
+            }
+        });
+    }
+
+    // =========================================
+    // BULK IMPORT/EXPORT LOGIC (CSV/JSON)
+    // =========================================
+    
     const exportBtn = document.getElementById('export-products-btn');
     const importModal = document.getElementById('import-products-modal');
     const closeImportBtn = document.getElementById('close-import-modal');
@@ -556,23 +680,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let selectedProducts = [];
     
-    console.log('Bulk import elements:', { bulkImportBtn, importModal, closeImportBtn });
-    
-    // Open import modal with bulk import button
-    if (bulkImportBtn) {
-        bulkImportBtn.addEventListener('click', () => {
-            console.log('Bulk Import button clicked');
-            if (importModal) {
-                console.log('Opening import modal');
-                importModal.classList.remove('hidden');
-                document.body.classList.add('modal-open');
-            } else {
-                console.error('Import modal not found');
-            }
-        });
-    } else {
-        console.error('Bulk import button not found');
-    }
+    console.log('CSV/JSON import elements:', { importModal, closeImportBtn });
     
     // Close import modal
     if (closeImportBtn) {

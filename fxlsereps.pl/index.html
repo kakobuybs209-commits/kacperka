@@ -1517,6 +1517,83 @@
         </main>
     </div>
 
+    <!-- Bulk Scrape Modal -->
+    <div class="modal-overlay hidden" id="bulk-scrape-modal">
+        <div class="modal-content" style="max-width: 700px;">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-robot"></i> Bulk Scrape - Weidian</h2>
+                <button class="close-btn" id="close-bulk-scrape-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="import-section">
+                    <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--text-secondary);">Wklej linki Weidian</h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
+                        Wklej jeden lub więcej linków Weidian (jeden na linię lub rozdzielone spacją)
+                    </p>
+                    
+                    <textarea 
+                        id="bulk-scrape-urls" 
+                        placeholder="https://weidian.com/item.html?itemID=123456789&#10;https://weidian.com/item.html?itemID=987654321"
+                        style="width: 100%; min-height: 150px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 1rem; color: var(--text-primary); font-family: monospace; font-size: 0.9rem; resize: vertical; margin-bottom: 1rem;"
+                    ></textarea>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div>
+                            <label style="display: block; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                                <i class="fa-solid fa-tag"></i> Batch
+                            </label>
+                            <select id="bulk-scrape-batch" style="width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 0.75rem; color: var(--text-primary);">
+                                <option value="best">Best</option>
+                                <option value="budget">Budget</option>
+                                <option value="random">Random</option>
+                                <option value="popular">Popular</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="display: block; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">
+                                <i class="fa-solid fa-bolt"></i> Concurrency
+                            </label>
+                            <select id="bulk-scrape-concurrency" style="width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 0.75rem; color: var(--text-primary);">
+                                <option value="2">2 (slow)</option>
+                                <option value="4" selected>4 (recommended)</option>
+                                <option value="6">6 (fast)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <label style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; cursor: pointer;">
+                        <input type="checkbox" id="bulk-scrape-pin" checked style="width: 18px; height: 18px;">
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">
+                            <i class="fa-solid fa-thumbtack"></i> Przypnij produkty
+                        </span>
+                    </label>
+                    
+                    <div id="bulk-scrape-progress" class="hidden" style="margin-bottom: 1rem;">
+                        <div style="background: rgba(255,255,255,0.05); border-radius: 8px; height: 8px; overflow: hidden; margin-bottom: 0.5rem;">
+                            <div id="bulk-scrape-progress-bar" style="background: #a855f7; height: 100%; width: 0%; transition: width 0.3s;"></div>
+                        </div>
+                        <div id="bulk-scrape-status" style="color: var(--text-muted); font-size: 0.85rem;"></div>
+                    </div>
+                    
+                    <div id="bulk-scrape-results" class="hidden" style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span style="color: var(--text-secondary);">Sukces:</span>
+                            <span id="bulk-scrape-success-count" style="color: #10b981; font-weight: 600;"></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: var(--text-secondary);">Błędy:</span>
+                            <span id="bulk-scrape-error-count" style="color: #ef4444; font-weight: 600;"></span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="start-bulk-scrape-btn" style="width: 100%; justify-content: center;">
+                        <i class="fa-solid fa-robot"></i> Rozpocznij Scraping
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Import Products Modal -->
     <div class="modal-overlay hidden" id="import-products-modal">
         <div class="modal-content" style="max-width: 600px;">
