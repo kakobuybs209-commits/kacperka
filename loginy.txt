@@ -1,0 +1,13 @@
+========================================
+       SWAGREPS - DANE DO LOGOWANIA
+========================================
+
+--- KONTO ADMINISTRATORA ---
+
+Login: admin
+Hasło: fxlserepswebsiteapi
+
+----------------------------------------
+Uwaga: Te dane pozwalają na dostęp do
+Panelu Administratora po kliknięciu 
+"Zaloguj" w prawym górnym rogu strony.
