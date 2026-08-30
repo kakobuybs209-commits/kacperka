@@ -8294,9 +8294,10 @@ body:has(#home-view.active) .site-footer { display: block; }
 
 /* Make dropdown smaller and more compact */
 .pv-dropdown-menu {
-    min-width: 220px !important;
+    min-width: 260px !important;
     max-height: 360px !important;
     padding: 0.4rem !important;
+    overflow-x: hidden !important;
 }
 
 .pv-drop-search-wrap {
@@ -8333,13 +8334,13 @@ body:has(#home-view.active) .site-footer { display: block; }
 
 /* Custom price range inputs */
 .pv-price-custom {
-    padding: 0.75rem 0.8rem !important;
+    padding: 0.75rem 0.5rem !important;
     border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
     margin-top: 0.4rem !important;
 }
 
 .pv-price-custom-label {
-    font-size: 0.75rem !important;
+    font-size: 0.7rem !important;
     color: #737373 !important;
     text-transform: uppercase !important;
     letter-spacing: 0.05em !important;
@@ -8350,7 +8351,7 @@ body:has(#home-view.active) .site-footer { display: block; }
 .pv-price-custom-inputs {
     display: flex !important;
     align-items: center !important;
-    gap: 0.5rem !important;
+    gap: 0.4rem !important;
     margin-bottom: 0.5rem !important;
 }
 
@@ -8359,11 +8360,12 @@ body:has(#home-view.active) .site-footer { display: block; }
     background: rgba(255, 255, 255, 0.03) !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
     color: #ffffff !important;
-    padding: 0.5rem 0.6rem !important;
-    border-radius: 8px !important;
+    padding: 0.45rem 0.5rem !important;
+    border-radius: 6px !important;
     font-family: inherit !important;
-    font-size: 0.85rem !important;
+    font-size: 0.8rem !important;
     outline: none !important;
+    min-width: 0 !important;
 }
 
 .pv-price-input:focus {
@@ -8377,7 +8379,8 @@ body:has(#home-view.active) .site-footer { display: block; }
 
 .pv-price-separator {
     color: #737373 !important;
-    font-size: 0.9rem !important;
+    font-size: 0.85rem !important;
+    flex-shrink: 0 !important;
 }
 
 .pv-price-apply-btn {
@@ -8385,10 +8388,10 @@ body:has(#home-view.active) .site-footer { display: block; }
     background: rgba(255, 255, 255, 0.08) !important;
     border: 1px solid rgba(255, 255, 255, 0.12) !important;
     color: #ffffff !important;
-    padding: 0.6rem !important;
-    border-radius: 8px !important;
+    padding: 0.55rem !important;
+    border-radius: 6px !important;
     font-family: inherit !important;
-    font-size: 0.85rem !important;
+    font-size: 0.8rem !important;
     font-weight: 600 !important;
     cursor: pointer !important;
     transition: all 0.2s ease !important;
