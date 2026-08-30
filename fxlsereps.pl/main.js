@@ -545,7 +545,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // BULK IMPORT/EXPORT LOGIC
     // =========================================
     
-    const importBtn = document.getElementById('import-products-btn');
+    const bulkImportBtn = document.getElementById('bulk-import-btn');
     const exportBtn = document.getElementById('export-products-btn');
     const importModal = document.getElementById('import-products-modal');
     const closeImportBtn = document.getElementById('close-import-modal');
@@ -556,14 +556,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let selectedProducts = [];
     
-    console.log('Bulk import elements:', { importBtn, importModal, closeImportBtn });
+    console.log('Bulk import elements:', { bulkImportBtn, importModal, closeImportBtn });
     
-    // Open import modal
-    if (importBtn) {
-        importBtn.addEventListener('click', () => {
-            console.log('Import button clicked');
+    // Open import modal with bulk import button
+    if (bulkImportBtn) {
+        bulkImportBtn.addEventListener('click', () => {
+            console.log('Bulk Import button clicked');
             if (importModal) {
-                console.log('Opening modal');
+                console.log('Opening import modal');
                 importModal.classList.remove('hidden');
                 document.body.classList.add('modal-open');
             } else {
@@ -571,7 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     } else {
-        console.error('Import button not found');
+        console.error('Bulk import button not found');
     }
     
     // Close import modal
@@ -705,12 +705,12 @@ document.addEventListener('DOMContentLoaded', () => {
         
         console.log('Initializing admin event listeners:', { addProductBtn, addMethodModal });
         
-        // Open method selection modal
+        // Open add product modal directly (no method selection)
         if (addProductBtn) {
             addProductBtn.addEventListener('click', () => {
                 console.log('Add product button clicked');
-                if (addMethodModal) {
-                    addMethodModal.classList.remove('hidden');
+                if (addProductModal) {
+                    addProductModal.classList.remove('hidden');
                     document.body.classList.add('modal-open');
                 }
             });
