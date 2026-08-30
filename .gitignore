@@ -1,0 +1,28 @@
+# Zależności
+node_modules/
+
+# Dane wrażliwe — NIE commitować
+loginy.txt
+*.env
+.env
+.env.*
+!.env.example
+credentials.json
+secrets.json
+
+# Śmieci systemowe
+__MACOSX/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Vercel
+.vercel/
+
+# Logi
+*.log
+npm-debug.log*
+
+# Edytory
+.idea/
+*.swp

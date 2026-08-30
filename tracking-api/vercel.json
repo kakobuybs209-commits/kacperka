@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/tracking/[code].js": {
+      "maxDuration": 15
+    }
+  }
+}

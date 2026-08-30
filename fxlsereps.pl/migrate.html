@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migracja do Supabase</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #fff;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            background: #a855f7;
+            color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 1rem 0;
+        }
+        .btn:hover {
+            background: #9333ea;
+        }
+        .btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+        #log {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 2rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .info { color: #a855f7; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-client.js?v=1"></script>
+</head>
+<body>
+    <h1>🚀 Migracja localStorage → Supabase</h1>
+    
+    <p>Ta strona zmigruje wszystkie dane z localStorage do Supabase.</p>
+    
+    <button id="migrate-btn" class="btn">Rozpocznij Migrację</button>
+    <button id="clear-btn" class="btn" style="background: #ef4444;">Wyczyść localStorage (po migracji)</button>
+    
+    <div id="log"></div>
+    
+    <script>
+        const logEl = document.getElementById('log');
+        
+        function log(message, type = 'info') {
+            const p = document.createElement('p');
+            p.className = type;
+            p.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logEl.appendChild(p);
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+        
+        document.getElementById('migrate-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('migrate-btn');
+            btn.disabled = true;
+            btn.textContent = 'Migracja w toku...';
+            
+            log('Rozpoczynam migrację...', 'info');
+            
+            try {
+                // Migrate products
+                const localProducts = JSON.parse(localStorage.getItem('products') || '[]');
+                log(`Znaleziono ${localProducts.length} produktów w localStorage`, 'info');
+                
+                if (localProducts.length > 0) {
+                    for (const product of localProducts) {
+                        const result = await saveProductToDB(product);
+                        if (result) {
+                            log(`✓ Produkt "${product.name}" zmigrowany`, 'success');
+                        } else {
+                            log(`✗ Błąd migracji produktu "${product.name}"`, 'error');
+                        }
+                    }
+                }
+                
+                // Migrate sellers
+                const localSellers = JSON.parse(localStorage.getItem('custom_sellers') || '[]');
+                log(`Znaleziono ${localSellers.length} sprzedawców w localStorage`, 'info');
+                
+                if (localSellers.length > 0) {
+                    for (const seller of localSellers) {
+                        const result = await saveSellerToDB({
+                            name: seller.name,
+                            description: seller.desc || '',
+                            brands: seller.brands ? seller.brands.split(',').map(b => b.trim()) : [],
+                            shop_url: seller.link || '',
+                            top_rated: seller.top_rated || false
+                        });
+                        if (result) {
+                            log(`✓ Sprzedawca "${seller.name}" zmigrowany`, 'success');
+                        } else {
+                            log(`✗ Błąd migracji sprzedawcy "${seller.name}"`, 'error');
+                        }
+                    }
+                }
+                
+                log('✅ Migracja zakończona pomyślnie!', 'success');
+                log('Możesz teraz wyczyścić localStorage używając przycisku poniżej.', 'info');
+                
+            } catch (error) {
+                log(`❌ Błąd podczas migracji: ${error.message}`, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Rozpocznij Migrację';
+            }
+        });
+        
+        document.getElementById('clear-btn').addEventListener('click', () => {
+            if (confirm('Czy na pewno chcesz wyczyścić localStorage? Ta operacja jest nieodwracalna!')) {
+                localStorage.removeItem('products');
+                localStorage.removeItem('custom_sellers');
+                log('✅ localStorage wyczyszczony!', 'success');
+            }
+        });
+    </script>
+</body>
+</html>
