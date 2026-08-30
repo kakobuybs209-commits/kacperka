@@ -626,12 +626,22 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let selectedProducts = [];
     
+    console.log('Bulk import elements:', { importBtn, importModal, closeImportBtn });
+    
     // Open import modal
     if (importBtn) {
         importBtn.addEventListener('click', () => {
-            importModal.classList.remove('hidden');
-            document.body.classList.add('modal-open');
+            console.log('Import button clicked');
+            if (importModal) {
+                console.log('Opening modal');
+                importModal.classList.remove('hidden');
+                document.body.classList.add('modal-open');
+            } else {
+                console.error('Import modal not found');
+            }
         });
+    } else {
+        console.error('Import button not found');
     }
     
     // Close import modal
