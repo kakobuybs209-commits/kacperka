@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test openImageLightbox Function</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #0f0f0f;
+            color: #fff;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+        h1 {
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        .test-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 5px;
+            transition: background 0.3s;
+        }
+        .test-button:hover {
+            background: #45a049;
+        }
+        .test-result {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-family: monospace;
+        }
+        .pass {
+            color: #4CAF50;
+        }
+        .fail {
+            color: #f44336;
+        }
+        /* Lightbox Styles */
+        .hidden {
+            display: none !important;
+        }
+        .pdv-lightbox-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .pdv-lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .pdv-lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        .pdv-lightbox-image {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Test: openImageLightbox() Function</h1>
+        
+        <div>
+            <h3>Test Scenario</h3>
+            <p>This test verifies that the openImageLightbox() function:</p>
+            <ol>
+                <li>Gets the lightbox element (pdv-lightbox)</li>
+                <li>Gets the lightbox image element (pdv-lightbox-image)</li>
+                <li>Sets the image src to the provided imageSrc parameter</li>
+                <li>Removes 'hidden' class from lightbox</li>
+                <li>Sets document.body.style.overflow = 'hidden' to prevent scroll</li>
+            </ol>
+        </div>
+
+        <div>
+            <button class="test-button" onclick="runTest()">Run Test</button>
+            <button class="test-button" onclick="testWithImage()">Test with Sample Image</button>
+            <button class="test-button" onclick="closeImageLightbox()">Close Lightbox</button>
+        </div>
+
+        <div id="test-results" class="test-result"></div>
+    </div>
+
+    <!-- Image Lightbox Modal -->
+    <div class="pdv-lightbox-overlay hidden" id="pdv-lightbox">
+        <button class="pdv-lightbox-close" id="pdv-lightbox-close" onclick="closeImageLightbox()">
+            ✕
+        </button>
+        <img src="" alt="" class="pdv-lightbox-image" id="pdv-lightbox-image">
+    </div>
+
+    <script>
+        // Copy the openImageLightbox function from script.js
+        function openImageLightbox(imageSrc) {
+            const lightbox = document.getElementById('pdv-lightbox');
+            const lightboxImage = document.getElementById('pdv-lightbox-image');
+            
+            if (lightbox && lightboxImage) {
+                lightboxImage.src = imageSrc;
+                lightbox.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeImageLightbox() {
+            const lightbox = document.getElementById('pdv-lightbox');
+            
+            if (lightbox) {
+                lightbox.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function runTest() {
+            const results = [];
+            const testImageSrc = 'https://via.placeholder.com/800x800/4CAF50/ffffff?text=Test+Image';
+
+            // Reset state
+            closeImageLightbox();
+
+            // Test 1: Get lightbox element
+            const lightbox = document.getElementById('pdv-lightbox');
+            if (lightbox) {
+                results.push({ test: 'Get lightbox element (pdv-lightbox)', passed: true });
+            } else {
+                results.push({ test: 'Get lightbox element (pdv-lightbox)', passed: false, error: 'Element not found' });
+            }
+
+            // Test 2: Get lightbox image element
+            const lightboxImage = document.getElementById('pdv-lightbox-image');
+            if (lightboxImage) {
+                results.push({ test: 'Get lightbox image element (pdv-lightbox-image)', passed: true });
+            } else {
+                results.push({ test: 'Get lightbox image element (pdv-lightbox-image)', passed: false, error: 'Element not found' });
+            }
+
+            // Test 3: Call openImageLightbox with test image
+            openImageLightbox(testImageSrc);
+
+            // Test 4: Verify image src was set
+            if (lightboxImage.src === testImageSrc) {
+                results.push({ test: 'Set image src to imageSrc parameter', passed: true });
+            } else {
+                results.push({ test: 'Set image src to imageSrc parameter', passed: false, error: `Expected ${testImageSrc}, got ${lightboxImage.src}` });
+            }
+
+            // Test 5: Verify 'hidden' class was removed
+            if (!lightbox.classList.contains('hidden')) {
+                results.push({ test: "Remove 'hidden' class from lightbox", passed: true });
+            } else {
+                results.push({ test: "Remove 'hidden' class from lightbox", passed: false, error: 'Hidden class still present' });
+            }
+
+            // Test 6: Verify body overflow was set to hidden
+            if (document.body.style.overflow === 'hidden') {
+                results.push({ test: 'Set document.body.style.overflow = "hidden"', passed: true });
+            } else {
+                results.push({ test: 'Set document.body.style.overflow = "hidden"', passed: false, error: `Expected "hidden", got "${document.body.style.overflow}"` });
+            }
+
+            // Display results
+            displayResults(results);
+        }
+
+        function testWithImage() {
+            const sampleImage = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&h=800&fit=crop';
+            openImageLightbox(sampleImage);
+        }
+
+        function displayResults(results) {
+            const resultsDiv = document.getElementById('test-results');
+            let html = '<h3>Test Results:</h3>';
+            
+            const passCount = results.filter(r => r.passed).length;
+            const totalCount = results.length;
+            
+            html += `<p><strong>Passed: ${passCount}/${totalCount}</strong></p>`;
+            
+            results.forEach(result => {
+                const status = result.passed ? '<span class="pass">✓ PASS</span>' : '<span class="fail">✗ FAIL</span>';
+                html += `<div>${status} - ${result.test}`;
+                if (result.error) {
+                    html += `<br>&nbsp;&nbsp;&nbsp;Error: ${result.error}`;
+                }
+                html += '</div>';
+            });
+            
+            if (passCount === totalCount) {
+                html += '<p class="pass"><strong>All tests passed! ✓</strong></p>';
+            } else {
+                html += '<p class="fail"><strong>Some tests failed! ✗</strong></p>';
+            }
+            
+            resultsDiv.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

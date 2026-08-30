@@ -3,7 +3,7 @@ const SUPABASE_URL = 'https://ziqvkrchmgmtlorqpghk.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InppcXZrcmNobWdtdGxvcnFwZ2hrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwNTI3ODEsImV4cCI6MjEwMzYyODc4MX0.CtofbvgJqkVipgvnndiEe7YvITMRyVMkwx7EqL7vyEM';
 
 // Initialize Supabase client
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // =========================================
 // PRODUCTS DATABASE FUNCTIONS

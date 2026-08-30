@@ -6113,7 +6113,7 @@ function showProductDetailError() {
  * Filters products by matching category, excludes current product, and populates the related products section
  * @param {Object} product - Current product object
  */
-function loadRelatedProducts(product) {
+async function loadRelatedProducts(product) {
     // Get relatedSection, relatedScroll, and categoryName elements
     const relatedSection = document.getElementById('pdv-related-section');
     const relatedScroll = document.getElementById('pdv-related-scroll');
