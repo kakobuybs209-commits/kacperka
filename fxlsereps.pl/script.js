@@ -1,77 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Add Product Modal Logic - pokazuje modal wyboru metody
-    const addProductBtn = document.getElementById('dodaj-przedmiot-btn');
-    const addMethodModal = document.getElementById('add-method-modal');
-    const addProductModal = document.getElementById('add-product-modal');
-    const closeMethodBtn = document.getElementById('close-method-modal');
-    const closeAddProductBtn = document.getElementById('close-add-product');
-    
-    const methodScraperCard = document.getElementById('method-scraper');
-    const methodBulkCard = document.getElementById('method-bulk');
-
-    // Open method selection modal
-    if(addProductBtn) addProductBtn.addEventListener('click', () => {
-        addMethodModal.classList.remove('hidden');
-        document.body.classList.add('modal-open');
-    });
-    
-    // Close method modal
-    if(closeMethodBtn) closeMethodBtn.addEventListener('click', () => {
-        addMethodModal.classList.add('hidden');
-        document.body.classList.remove('modal-open');
-    });
-    
-    // Click outside to close
-    if(addMethodModal) {
-        addMethodModal.addEventListener('click', (e) => {
-            if (e.target === addMethodModal) {
-                closeMethodBtn.click();
-            }
-        });
-    }
-    
-    // Hover effects for cards - monochromatyczny styl
-    document.querySelectorAll('.add-method-card').forEach(card => {
-        card.addEventListener('mouseenter', () => {
-            card.style.transform = 'translateY(-8px)';
-            card.style.background = 'rgba(255,255,255,0.08)';
-            card.style.borderColor = 'rgba(255,255,255,0.2)';
-            card.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.5)';
-        });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'translateY(0)';
-            card.style.background = 'rgba(255,255,255,0.03)';
-            card.style.borderColor = 'rgba(255,255,255,0.1)';
-            card.style.boxShadow = 'none';
-        });
-    });
-    
-    // Scraper method - opens manual add modal
-    if(methodScraperCard) methodScraperCard.addEventListener('click', () => {
-        addMethodModal.classList.add('hidden');
-        addProductModal.classList.remove('hidden');
-    });
-    
-    // Bulk method - opens import modal
-    if(methodBulkCard) methodBulkCard.addEventListener('click', () => {
-        addMethodModal.classList.add('hidden');
-        document.getElementById('import-products-modal').classList.remove('hidden');
-    });
-
-    function toggleAddProductModal() {
-        if(addProductModal) addProductModal.classList.toggle('hidden');
-    }
-
-    if(closeAddProductBtn) closeAddProductBtn.addEventListener('click', toggleAddProductModal);
-
-    if(addProductModal) {
-        addProductModal.addEventListener('click', (e) => {
-            if (e.target === addProductModal) {
-                toggleAddProductModal();
-            }
-        });
-    }
-
     // SPA View Routing (Home vs Sellers)
     const navHomeBtn = document.getElementById('nav-home-btn');
     const navSellersBtn = document.getElementById('nav-sellers-btn');
@@ -519,6 +446,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 adminPanel.style.display = 'flex';
             }
             
+            // Initialize admin event listeners (after panel is shown)
+            initializeAdminEventListeners();
+            
         } else {
             // Failure
             loginError.classList.remove('hidden');
@@ -761,6 +691,106 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+    
+    // Function to initialize admin event listeners after login
+    function initializeAdminEventListeners() {
+        // Get elements after admin panel is shown
+        const addProductBtn = document.getElementById('dodaj-przedmiot-btn');
+        const addMethodModal = document.getElementById('add-method-modal');
+        const closeMethodBtn = document.getElementById('close-method-modal');
+        const methodScraperCard = document.getElementById('method-scraper');
+        const methodBulkCard = document.getElementById('method-bulk');
+        const addProductModal = document.getElementById('add-product-modal');
+        const closeAddProductBtn = document.getElementById('close-add-product');
+        
+        console.log('Initializing admin event listeners:', { addProductBtn, addMethodModal });
+        
+        // Open method selection modal
+        if (addProductBtn) {
+            addProductBtn.addEventListener('click', () => {
+                console.log('Add product button clicked');
+                if (addMethodModal) {
+                    addMethodModal.classList.remove('hidden');
+                    document.body.classList.add('modal-open');
+                }
+            });
+        }
+        
+        // Close method modal
+        if (closeMethodBtn) {
+            closeMethodBtn.addEventListener('click', () => {
+                addMethodModal.classList.add('hidden');
+                document.body.classList.remove('modal-open');
+            });
+        }
+        
+        // Click outside to close
+        if (addMethodModal) {
+            addMethodModal.addEventListener('click', (e) => {
+                if (e.target === addMethodModal) {
+                    closeMethodBtn.click();
+                }
+            });
+        }
+        
+        // Hover effects for cards
+        document.querySelectorAll('.add-method-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-8px)';
+                card.style.background = 'rgba(255,255,255,0.08)';
+                card.style.borderColor = 'rgba(255,255,255,0.2)';
+                card.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.5)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+                card.style.background = 'rgba(255,255,255,0.03)';
+                card.style.borderColor = 'rgba(255,255,255,0.1)';
+                card.style.boxShadow = 'none';
+            });
+        });
+        
+        // Scraper method - opens manual add modal
+        if (methodScraperCard) {
+            methodScraperCard.addEventListener('click', () => {
+                addMethodModal.classList.add('hidden');
+                if (addProductModal) {
+                    addProductModal.classList.remove('hidden');
+                }
+            });
+        }
+        
+        // Bulk method - opens import modal
+        if (methodBulkCard) {
+            methodBulkCard.addEventListener('click', () => {
+                addMethodModal.classList.add('hidden');
+                const importModal = document.getElementById('import-products-modal');
+                if (importModal) {
+                    importModal.classList.remove('hidden');
+                    document.body.classList.add('modal-open');
+                }
+            });
+        }
+        
+        // Close add product modal
+        if (closeAddProductBtn) {
+            closeAddProductBtn.addEventListener('click', () => {
+                if (addProductModal) {
+                    addProductModal.classList.toggle('hidden');
+                }
+            });
+        }
+        
+        if (addProductModal) {
+            addProductModal.addEventListener('click', (e) => {
+                if (e.target === addProductModal) {
+                    addProductModal.classList.toggle('hidden');
+                }
+            });
+        }
+    }
+    
+    // Make function available globally
+    window.initializeAdminEventListeners = initializeAdminEventListeners;
 
 });
 
