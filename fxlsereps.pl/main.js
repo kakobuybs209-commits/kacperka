@@ -3705,13 +3705,24 @@ async function saveSellers(arr) {
 
 function buildSellerCard(seller) {
     const initial = (seller.name || '?')[0].toUpperCase();
-    const brandsArr = (seller.brands || '').split(',').map(b => b.trim()).filter(Boolean);
-    const tagsHtml = brandsArr.slice(0,4).map(b =>
-        `<span class="seller-tag-premium">${b}</span>`
+    
+    // Get brands from seller object (could be array or string)
+    let brandsArr = [];
+    if (Array.isArray(seller.brands)) {
+        brandsArr = seller.brands;
+    } else if (typeof seller.brands === 'string') {
+        brandsArr = seller.brands.split(',').map(b => b.trim()).filter(Boolean);
+    }
+    
+    // Build tags HTML with icons (show first 4 brands)
+    const tagsHtml = brandsArr.slice(0, 4).map(b =>
+        `<span class="seller-tag-premium"><i class="fa-solid fa-tag" style="font-size: 0.7rem; margin-right: 4px; opacity: 0.5;"></i> ${b}</span>`
     ).join('');
+    
     const card = document.createElement('div');
     card.className = 'seller-card-premium';
-    card.setAttribute('data-brands', seller.brands || '');
+    // Store all brands in data-brands attribute for filtering
+    card.setAttribute('data-brands', brandsArr.join(','));
     card.setAttribute('data-seller-id', seller.id);
     card.innerHTML = `
         <div class="seller-header">
@@ -3720,9 +3731,9 @@ function buildSellerCard(seller) {
                 <h3>${seller.name} <span class="top-rated-star"><i class="fa-solid fa-star"></i> Top rated</span></h3>
             </div>
         </div>
-        <p class="seller-desc">${seller.desc || ''}</p>
+        <p class="seller-desc">${seller.desc || seller.description || ''}</p>
         <div class="seller-tags-premium">${tagsHtml}</div>
-        <a href="${seller.link || '#'}" target="_blank" class="seller-btn-premium">Odwiedź Sklep</a>
+        <a href="${seller.link || seller.shop_url || '#'}" target="_blank" class="seller-btn-premium">Odwiedź Sklep</a>
     `;
     return card;
 }
