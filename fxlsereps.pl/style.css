@@ -4962,16 +4962,14 @@ a {
     border-color: #fff !important;
 }
 
-/* Grid */
+/* Grid - using masonry layout to prevent chaos */
 .sv-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    align-items: start;
+    column-count: 4;
+    column-gap: 1rem;
 }
-@media (max-width: 1100px) { .sv-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 780px)  { .sv-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 500px)  { .sv-grid { grid-template-columns: 1fr; } }
+@media (max-width: 1100px) { .sv-grid { column-count: 3; } }
+@media (max-width: 780px)  { .sv-grid { column-count: 2; } }
+@media (max-width: 500px)  { .sv-grid { column-count: 1; } }
 
 /* Card */
 .seller-card-premium {
@@ -4991,6 +4989,8 @@ a {
                 box-shadow 0.25s ease !important;
     position: relative !important;
     overflow: hidden !important;
+    break-inside: avoid !important;
+    margin-bottom: 1rem !important;
 }
 .seller-card-premium::before {
     content: '';
