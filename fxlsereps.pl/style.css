@@ -5078,6 +5078,8 @@ a {
     gap: 0.35rem !important;
     max-width: 100% !important;
     overflow: hidden !important;
+    max-height: 3.2rem !important;
+    min-height: 1.8rem !important;
 }
 .seller-tag-premium {
     display: inline-flex !important;
@@ -5095,6 +5097,7 @@ a {
     text-overflow: ellipsis !important;
     max-width: 100% !important;
     flex-shrink: 1 !important;
+    line-height: 1.2 !important;
 }
 .seller-tag-premium i {
     flex-shrink: 0 !important;

@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!tagsContainer) return;
         
         const brandsArr = brandsString.split(',').map(b => b.trim()).filter(Boolean);
-        const maxTags = 6;
+        const maxTags = 4; // Reduced from 6 to fit better
         let displayBrands = [];
         
         if (searchQuery) {
@@ -3749,10 +3749,10 @@ function buildSellerCard(seller, searchQuery = '') {
         brandsArr = seller.brands.split(',').map(b => b.trim()).filter(Boolean);
     }
     
-    // Smart tag selection: show up to 6 tags to increase visibility
+    // Smart tag selection: show up to 4 tags (reduced from 6 to fit layout better)
     // If search is active, prioritize matching brands
     let displayBrands = [];
-    const maxTags = 6;
+    const maxTags = 4;
     
     if (searchQuery && searchQuery.length > 0) {
         const query = searchQuery.toLowerCase();
@@ -3762,7 +3762,7 @@ function buildSellerCard(seller, searchQuery = '') {
         // Show matching first, then fill with non-matching up to maxTags
         displayBrands = [...matching.slice(0, maxTags), ...nonMatching].slice(0, maxTags);
     } else {
-        // No search - show first 6
+        // No search - show first 4
         displayBrands = brandsArr.slice(0, maxTags);
     }
     
