@@ -5086,6 +5086,12 @@ a {
     font-size: 0.68rem !important;
     font-weight: 600 !important;
     padding: 3px 7px !important;
+    transition: all 0.2s ease !important;
+}
+.seller-tag-highlight {
+    background: rgba(16, 185, 129, 0.15) !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+    color: rgba(52, 211, 153, 0.9) !important;
 }
 
 /* Visit button */

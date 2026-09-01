@@ -3703,7 +3703,7 @@ async function saveSellers(arr) {
     console.warn('saveSellers() is deprecated - use saveSellerToDB() instead');
 }
 
-function buildSellerCard(seller) {
+function buildSellerCard(seller, searchQuery = '') {
     const initial = (seller.name || '?')[0].toUpperCase();
     
     // Get brands from seller object (could be array or string)
@@ -3714,10 +3714,30 @@ function buildSellerCard(seller) {
         brandsArr = seller.brands.split(',').map(b => b.trim()).filter(Boolean);
     }
     
-    // Build tags HTML with icons (show first 4 brands)
-    const tagsHtml = brandsArr.slice(0, 4).map(b =>
-        `<span class="seller-tag-premium"><i class="fa-solid fa-tag" style="font-size: 0.7rem; margin-right: 4px; opacity: 0.5;"></i> ${b}</span>`
-    ).join('');
+    // Smart tag selection: show up to 6 tags to increase visibility
+    // If search is active, prioritize matching brands
+    let displayBrands = [];
+    const maxTags = 6;
+    
+    if (searchQuery && searchQuery.length > 0) {
+        const query = searchQuery.toLowerCase();
+        // First add matching brands
+        const matching = brandsArr.filter(b => b.toLowerCase().includes(query));
+        const nonMatching = brandsArr.filter(b => !b.toLowerCase().includes(query));
+        // Show matching first, then fill with non-matching up to maxTags
+        displayBrands = [...matching.slice(0, maxTags), ...nonMatching].slice(0, maxTags);
+    } else {
+        // No search - show first 6
+        displayBrands = brandsArr.slice(0, maxTags);
+    }
+    
+    // Build tags HTML with icons
+    const tagsHtml = displayBrands.map(b => {
+        // Highlight matching tags if search is active
+        const isMatch = searchQuery && b.toLowerCase().includes(searchQuery.toLowerCase());
+        const highlightClass = isMatch ? ' seller-tag-highlight' : '';
+        return `<span class="seller-tag-premium${highlightClass}"><i class="fa-solid fa-tag" style="font-size: 0.7rem; margin-right: 4px; opacity: 0.5;"></i> ${b}</span>`;
+    }).join('');
     
     const card = document.createElement('div');
     card.className = 'seller-card-premium';
