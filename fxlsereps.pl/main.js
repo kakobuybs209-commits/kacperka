@@ -141,20 +141,24 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let visibleCount = 0;
         cards.forEach(card => {
+            const cardBrands = card.getAttribute('data-brands') || '';
+            const name   = (card.querySelector('.seller-info h3')?.textContent || '').toLowerCase();
+            const desc   = (card.querySelector('.seller-desc')?.textContent || '').toLowerCase();
+            
             if (!q) {
+                // No search - show all cards and reset tags
                 card.style.display = '';
                 card.style.visibility = 'visible';
                 card.style.opacity = '1';
                 card.style.position = 'relative';
                 visibleCount++;
+                
+                // Reset tags to first 6
+                updateCardTags(card, cardBrands, '');
                 return;
             }
             
-            const name   = (card.querySelector('.seller-info h3')?.textContent || '').toLowerCase();
-            const brands = (card.getAttribute('data-brands') || '').toLowerCase();
-            const desc   = (card.querySelector('.seller-desc')?.textContent || '').toLowerCase();
-            
-            const matches = name.includes(q) || brands.includes(q) || desc.includes(q);
+            const matches = name.includes(q) || cardBrands.toLowerCase().includes(q) || desc.includes(q);
             
             if (matches) {
                 card.style.display = '';
@@ -162,6 +166,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.style.opacity = '1';
                 card.style.position = 'relative';
                 visibleCount++;
+                
+                // Update tags to prioritize matching brands
+                updateCardTags(card, cardBrands, q);
             } else {
                 card.style.display = 'none';
                 card.style.visibility = 'hidden';
@@ -171,6 +178,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         console.log('Search results:', visibleCount, 'cards');
+    }
+    
+    // Helper function to update card tags based on search query
+    function updateCardTags(card, brandsString, searchQuery) {
+        const tagsContainer = card.querySelector('.seller-tags-premium');
+        if (!tagsContainer) return;
+        
+        const brandsArr = brandsString.split(',').map(b => b.trim()).filter(Boolean);
+        const maxTags = 6;
+        let displayBrands = [];
+        
+        if (searchQuery) {
+            // Prioritize matching brands
+            const matching = brandsArr.filter(b => b.toLowerCase().includes(searchQuery));
+            const nonMatching = brandsArr.filter(b => !b.toLowerCase().includes(searchQuery));
+            displayBrands = [...matching.slice(0, maxTags), ...nonMatching].slice(0, maxTags);
+        } else {
+            displayBrands = brandsArr.slice(0, maxTags);
+        }
+        
+        // Build tags HTML
+        const tagsHtml = displayBrands.map(b => {
+            const isMatch = searchQuery && b.toLowerCase().includes(searchQuery);
+            const highlightClass = isMatch ? ' seller-tag-highlight' : '';
+            return `<span class="seller-tag-premium${highlightClass}"><i class="fa-solid fa-tag" style="font-size: 0.7rem; margin-right: 4px; opacity: 0.5;"></i> ${b}</span>`;
+        }).join('');
+        
+        tagsContainer.innerHTML = tagsHtml;
     }
 
     // Tag click — event delegation
