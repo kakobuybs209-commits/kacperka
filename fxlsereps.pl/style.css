@@ -5074,7 +5074,9 @@ a {
 .seller-tags-premium {
     display: flex !important;
     flex-wrap: wrap !important;
-    gap: 0.3rem !important;
+    gap: 0.35rem !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
 }
 .seller-tag-premium {
     display: inline-flex !important;
@@ -5083,10 +5085,18 @@ a {
     border: 1px solid rgba(255,255,255,0.07) !important;
     border-radius: 6px !important;
     color: rgba(255,255,255,0.45) !important;
-    font-size: 0.68rem !important;
+    font-size: 0.65rem !important;
     font-weight: 600 !important;
-    padding: 3px 7px !important;
+    padding: 3px 6px !important;
     transition: all 0.2s ease !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+    flex-shrink: 1 !important;
+}
+.seller-tag-premium i {
+    flex-shrink: 0 !important;
 }
 .seller-tag-highlight {
     background: rgba(16, 185, 129, 0.15) !important;
